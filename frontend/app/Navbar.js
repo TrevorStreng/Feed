@@ -7,6 +7,7 @@ export default function Navbar() {
       <div className="flex space-x-4">
         <Link href="/notifications" className="hover:text-gray-300">Notifications</Link>
         <Link href="/messages" className="hover:text-gray-300">Messages</Link>
+        <Link href="/login" className="hover:text-gray-300">Login</Link>
       </div>
     </header>
   );
