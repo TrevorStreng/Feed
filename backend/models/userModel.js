@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 
 const userSchema = new Schema({
@@ -16,3 +17,6 @@ const userSchema = new Schema({
   passwordResetToken: String,
   passwordResetExpires: Date,
 });
+
+const User = mongoose.model("User", userSchema);
+module.exports = User;

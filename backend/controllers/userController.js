@@ -6,7 +6,8 @@ const AppError = require("./../utils/appError");
 // };
 
 exports.getAllUsers = async (req, res) => {
-  const users = await User.find();
+  const users = await User.find({});
+  console.log("get request made");
   // SEND RESPONSE
   res.status(200).json({
     status: "success",
