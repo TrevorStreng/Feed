@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 const User = require("./../models/userModel");
 const AppError = require("./../utils/appError");
-const dotenv = require("dotenv");
 
 dotenv.config({ path: "./../.env" });
 
@@ -39,7 +39,6 @@ exports.login = async (req, res, next) => {
   const user = await User.findOne({ email: email });
   if (!(await user.verifyPassword(password, user.password)))
     return next(new AppError("Incorrect Password!", 401));
-  await User.updateOne({ _id: user._id }, { loggedIn: true });
 
   createAndSendToken(user, 200, res);
 };
@@ -71,21 +70,14 @@ exports.signUp = async (req, res, next) => {
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
+      confirmPassword: req.body.confirmPassword,
     }
   );
   createAndSendToken(newUser, 201, res);
-
-  res.status(201).json({
-    status: "User created successfully!",
-    data: {
-      data: newUser,
-    },
-  });
 };
 
 exports.protect = async (req, res, next) => {
   let token;
-  console.log(req.headers.authorization);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -97,8 +89,6 @@ exports.protect = async (req, res, next) => {
   if (!token) return next(new AppError("You need to be logged in.💥", 401));
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-  console.log(decoded);
 
   // verify account has been deleted
   const user = User.findById(decoded.id);

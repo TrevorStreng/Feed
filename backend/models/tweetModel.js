@@ -7,10 +7,14 @@ const tweetSchema = new Schema({
     type: String,
     required: [true, "What's on your mind?"],
   },
-  userId: {
+  username: {
     type: String,
     required: [true, "Must be a user to tweet"],
   },
+  // userId: {
+  //   type: String,
+  //   required: [true, "Must be a user to tweet"],
+  // },
 });
 
 const Tweet = mongoose.model("Tweet", tweetSchema);

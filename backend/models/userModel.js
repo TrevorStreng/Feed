@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
+const bcrypt = require("bcryptjs");
+const AppError = require("../utils/appError");
 
 const userSchema = new Schema({
   username: {
@@ -14,25 +16,45 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Please provide a password"],
   },
+  confirmPassword: {
+    type: String,
+    select: false,
+  },
   role: {
     type: String,
     enum: ["admin", "user"],
     default: "user",
   },
-  //! temporary
-  loggedIn: {
-    type: Boolean,
-    default: false,
-  },
   passwordResetToken: String,
   passwordResetExpires: Date,
 });
 
-userSchema.methods.verifyPassword = function (givenPassword, actualPassword) {
-  return givenPassword === actualPassword;
-  // ! Need to use bcrypt to check hashes later
+userSchema.pre("save", function (next) {
+  const { password, confirmPassword } = this;
+  console.log(password + " : " + confirmPassword);
+
+  if (this.isModified("password") && password !== confirmPassword) {
+    return next(new AppError("Passwords do not match.", 401));
+  }
+  this.confirmPassword = undefined;
+  next();
+});
+
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 12);
+  }
+  next();
+});
+
+userSchema.methods.verifyPassword = async function (
+  givenPassword,
+  storedPassword
+) {
+  return await bcrypt.compare(givenPassword, storedPassword);
 };
 
-const User = mongoose.model("User", userSchema);
 // mongoose pluralizes and lowercases model name to determine which collection to get data from
+const User = mongoose.model("User", userSchema);
+
 module.exports = User;

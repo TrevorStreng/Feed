@@ -10,5 +10,6 @@ router.get("/", tweetController.getAllTweets);
 router.use(authController.protect);
 
 router.post("/createTweet", tweetController.createTweet);
+router.delete("/deleteTweet", tweetController.deleteTweet);
 
 module.exports = router;
