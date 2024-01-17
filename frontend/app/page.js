@@ -13,9 +13,11 @@ export default function Home() {
   };
   const fetchAllTweets = async () => {
     try {
-      const res = await axios.get(`http://${url}/api/tweets`);
+      const res = await axios.get(`/api/tweets`);
       console.log(res.data);
-      setTweets(res.data.tweets);
+      let tweetArr = res.data.tweets;
+      tweetArr = tweetArr.reverse();
+      setTweets(tweetArr);
     } catch (err) {
       console.error(err);
     }
@@ -24,6 +26,19 @@ export default function Home() {
   useEffect(() => {
     fetchAllTweets();
   }, []);
+
+  const createTweet = async () => {
+    try {
+      const body = {
+        userId: '65a6cb32b3b82e1d87162e49',
+        message: tweet,
+        // tags ,
+      };
+      const res = await axios.post(`/api/tweets/createTweet`, body);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">
@@ -51,6 +66,7 @@ export default function Home() {
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-full"
               disabled={tweet.length > 280}
+              onClick={createTweet}
             >
               Post
             </button>
@@ -89,14 +105,14 @@ export default function Home() {
                 <div>
                   <h3 className="font-semibold">Random Person</h3>
                   <p>{el.message}</p>
-                  <div className="flex">
+                  {/*<div className="flex">
                     {el.tags.length > 0 &&
                       el.tags.map((tag, index) => (
                         <div key={index} id="hashtags">
                           <p>{tag}</p>
                         </div>
                       ))}
-                  </div>
+                      </div> */}
                 </div>
               </div>
             </div>

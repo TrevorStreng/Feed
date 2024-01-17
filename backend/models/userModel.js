@@ -1,20 +1,20 @@
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
-const bcrypt = require("bcryptjs");
-const AppError = require("../utils/appError");
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
+const bcrypt = require('bcryptjs');
+const AppError = require('../utils/appError');
 
 const userSchema = new Schema({
   username: {
     type: String,
-    required: [true, "Please choose a username"],
+    required: [true, 'Please choose a username'],
   },
   email: {
     type: String,
-    required: [true, "Please provide an email"],
+    required: [true, 'Please provide an email'],
   },
   password: {
     type: String,
-    required: [true, "Please provide a password"],
+    required: [true, 'Please provide a password'],
   },
   confirmPassword: {
     type: String,
@@ -22,33 +22,33 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user"],
-    default: "user",
+    enum: ['admin', 'user'],
+    default: 'user',
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
 });
 
-userSchema.pre("save", function (next) {
+userSchema.pre('save', function (next) {
   const { password, confirmPassword } = this;
 
-  if (this.isModified("password") && password !== confirmPassword) {
-    return next(new AppError("Passwords do not match.", 401));
+  if (this.isModified('password') && password !== confirmPassword) {
+    return next(new AppError('Passwords do not match.', 401));
   }
   this.confirmPassword = undefined;
   next();
 });
 
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 12);
   }
   next();
 });
 
-userSchema.pre("save", function (next) {
-  if (this.isModified("password") || !this.isNew) {
+userSchema.pre('save', function (next) {
+  if (this.isModified('password') || !this.isNew) {
     this.passwordChangedAt = Date.now();
   }
   next();
@@ -62,6 +62,6 @@ userSchema.methods.verifyPassword = async function (
 };
 
 // mongoose pluralizes and lowercases model name to determine which collection to get data from
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

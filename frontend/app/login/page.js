@@ -1,9 +1,12 @@
 'use client';
 import React, { useState } from 'react';
+import axios from 'axios';
 
 export default function Login() {
+  const url = process.env.URL;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setconfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -22,10 +25,24 @@ export default function Login() {
     setEmail(e.target.value);
   };
 
+  const handleconfirmPasswordChange = (e) => {
+    setconfirmPassword(e.target.value);
+  };
+
   const handleLogin = async () => {
     setIsLoading(true);
     try {
       // Login logic stuff here
+      const body = {
+        username: username,
+        password: password,
+      };
+
+      const res = await axios.post(`/api/users/login`, body, {
+        withCredentials: true,
+      });
+
+      // const setCookieHeader = res.headers['set-cookie'];
       console.log(
         `Logging in with username: ${username} and password: ${password}`
       );
@@ -41,8 +58,19 @@ export default function Login() {
     setIsLoading(true);
     try {
       // Registering account logic here
+      const body = {
+        username: username,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+      };
+
+      const res = await axios.post(`/api/users/signup`, body, {
+        withCredentials: true,
+      });
+
       console.log(
-        `Registering with username: ${username}, email: ${email}, and password: ${password}`
+        `Registering with username: ${username}, email: ${email}, password: ${password} and confirmPassword: ${confirmPassword}`
       );
       // API calls or anything here
     } catch (error) {
@@ -117,6 +145,18 @@ export default function Login() {
                 aria-label="Password"
               />
             </label>
+            {isRegistering && (
+              <label className="block mb-4">
+                confirm password:
+                <input
+                  className="border w-full p-2 mt-1"
+                  type={showPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={handleconfirmPasswordChange}
+                  aria-label="Email"
+                />
+              </label>
+            )}
             <button
               type="button"
               onClick={togglePasswordVisibility}
@@ -127,11 +167,11 @@ export default function Login() {
           </div>
 
           <button
-            className={`bg-${
-              isRegistering ? 'green' : 'blue'
-            }-500 text-white p-2 rounded hover:bg-${
-              isRegistering ? 'green' : 'blue'
-            }-600 focus:outline-none`}
+            className={`${
+              isRegistering ? 'bg-green-500' : 'bg-blue-500'
+            } text-white p-2 rounded ${
+              isRegistering ? 'hover:bg-green-600' : 'hover:bg-blue-600'
+            } focus:outline-none`}
             type="button"
             onClick={isRegistering ? handleRegister : handleLogin}
             disabled={isLoading}

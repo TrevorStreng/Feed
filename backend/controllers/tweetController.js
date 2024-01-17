@@ -26,7 +26,7 @@ exports.createTweet = async (req, res, next) => {
     // userId: userId,
     username: username,
     message: message,
-    tags: req.body.tags.split(' '),
+    // tags: req.body.tags.split(' '),
   });
   res.status(201).json({
     status: 'You wrote a tweet!',

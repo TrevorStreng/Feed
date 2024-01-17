@@ -1,6 +1,6 @@
-const { ObjectId } = require("mongodb");
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
+const { ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const tweetSchema = new Schema({
   message: {
@@ -9,16 +9,16 @@ const tweetSchema = new Schema({
   },
   username: {
     type: String,
-    required: [true, "Must be a user to tweet"],
+    required: [true, 'Must be a user to tweet'],
   },
   // userId: {
   //   type: String,
   //   required: [true, "Must be a user to tweet"],
   // },
-  tags: {
-    type: [String],
-  },
+  // tags: {
+  //   type: [String],
+  // },
 });
 
-const Tweet = mongoose.model("Tweet", tweetSchema);
+const Tweet = mongoose.model('Tweet', tweetSchema);
 module.exports = Tweet;
