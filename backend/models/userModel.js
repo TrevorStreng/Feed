@@ -25,13 +25,13 @@ const userSchema = new Schema({
     enum: ["admin", "user"],
     default: "user",
   },
+  passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
 });
 
 userSchema.pre("save", function (next) {
   const { password, confirmPassword } = this;
-  console.log(password + " : " + confirmPassword);
 
   if (this.isModified("password") && password !== confirmPassword) {
     return next(new AppError("Passwords do not match.", 401));
@@ -43,6 +43,13 @@ userSchema.pre("save", function (next) {
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 12);
+  }
+  next();
+});
+
+userSchema.pre("save", function (next) {
+  if (this.isModified("password") || !this.isNew) {
+    this.passwordChangedAt = Date.now();
   }
   next();
 });

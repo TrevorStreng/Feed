@@ -15,6 +15,9 @@ const tweetSchema = new Schema({
   //   type: String,
   //   required: [true, "Must be a user to tweet"],
   // },
+  tags: {
+    type: [String],
+  },
 });
 
 const Tweet = mongoose.model("Tweet", tweetSchema);
