@@ -12,6 +12,9 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "4.0",
-    "mongoose": "^8.0.4"
+    "mongoose": "^8.0.4",
+    "nodemailer": "^6.9.8",
+    "nodemailer-sendgrid": "^1.0.3",
+    "socket.io": "^4.7.4"
   }
 }

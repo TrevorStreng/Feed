@@ -83,7 +83,14 @@ export default function Login() {
   const handleForgotPassword = async () => {
     setIsLoading(true);
     try {
+      const body = {
+        email: email,
+      };
       // Forgot password logic stuff here
+      const res = await axios.post(`/api/users/forgotPassword`, body, {
+        withCredentials: true,
+      });
+
       console.log('Forgot password clicked');
       // A modal popup or something that leads to a password recovery page here
     } catch (error) {

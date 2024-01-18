@@ -4,7 +4,6 @@ const AppError = require('./../utils/appError');
 
 exports.getAllTweets = async (req, res, next) => {
   const tweets = await Tweet.find({});
-  console.log('Getting all tweets');
 
   res.status(200).json({
     status: 'success',

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const AppError = require('../utils/appError');
 
 const userSchema = new Schema({
@@ -59,6 +60,23 @@ userSchema.methods.verifyPassword = async function (
   storedPassword
 ) {
   return await bcrypt.compare(givenPassword, storedPassword);
+};
+
+userSchema.methods.createPasswordResetToken = async function () {
+  // creating a random string to hash
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  // hashing random string // hashed token is hashed in db incase anyone gets into db
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  console.log({ resetToken }, this.passwordResetToken);
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
 };
 
 // mongoose pluralizes and lowercases model name to determine which collection to get data from

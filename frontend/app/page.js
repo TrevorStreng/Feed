@@ -14,23 +14,31 @@ export default function Home() {
   const fetchAllTweets = async () => {
     try {
       const res = await axios.get(`/api/tweets`);
-      console.log(res.data);
+
       let tweetArr = res.data.tweets;
       tweetArr = tweetArr.reverse();
+
       setTweets(tweetArr);
     } catch (err) {
       console.error(err);
     }
   };
 
-  useEffect(() => {
-    fetchAllTweets();
-  }, []);
+  const getUserFromToken = async () => {
+    try {
+      const res = await axios.get('/api/users/me');
+      return res.data.userId;
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const createTweet = async () => {
     try {
+      const userId = await getUserFromToken();
+
       const body = {
-        userId: '65a6cb32b3b82e1d87162e49',
+        userId: userId,
         message: tweet,
         // tags ,
       };
@@ -39,6 +47,10 @@ export default function Home() {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    fetchAllTweets();
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">
@@ -103,7 +115,7 @@ export default function Home() {
                   height={40}
                 />
                 <div>
-                  <h3 className="font-semibold">Random Person</h3>
+                  <h3 className="font-semibold">{el.username}</h3>
                   <p>{el.message}</p>
                   {/*<div className="flex">
                     {el.tags.length > 0 &&
