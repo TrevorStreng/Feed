@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function Login() {
   const url = process.env.URL;
@@ -12,6 +13,7 @@ export default function Login() {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -29,6 +31,15 @@ export default function Login() {
     setconfirmPassword(e.target.value);
   };
 
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (isLoggedIn && pathname !== '/') {
+      router.push('/');
+    }
+  }, [isLoggedIn, pathname]);
+
   const handleLogin = async () => {
     setIsLoading(true);
     try {
@@ -37,22 +48,26 @@ export default function Login() {
         username: username,
         password: password,
       };
-
+  
       const res = await axios.post(`/api/users/login`, body, {
         withCredentials: true,
       });
-
-      // const setCookieHeader = res.headers['set-cookie'];
+  
+      // const setCookieHeader = res.headers['set-cookie']; 
       console.log(
         `Logging in with username: ${username} and password: ${password}`
       );
+  
       // Any authentication stuff here like API calls
+  
+      // If the login is successful, set isLoggedIn to true
+      setIsLoggedIn(true);
     } catch (error) {
       console.error(error);
-      // Display error message to user
+      // Display error message to the user
     }
     setIsLoading(false);
-  };
+  };    
 
   const handleRegister = async () => {
     setIsLoading(true);
