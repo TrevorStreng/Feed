@@ -56,6 +56,7 @@ export default function Home() {
       };
       const res = await axios.post(`/api/tweets/createTweet`, body);
       webSocketUpdate();
+      setTweet('');
     } catch (err) {
       console.error(err);
     }
@@ -64,9 +65,9 @@ export default function Home() {
   // WebSocket connection
   const webSocketUpdate = () => {
     socket.on('new-post', (data) => {
-      console.log('WebSocket connection established:', socket.connected);
-      console.log('New post: ', data);
-      console.log('socket id: ', socket.id);
+      // console.log('WebSocket connection established:', socket.connected);
+      // console.log('New post: ', data);
+      // console.log('socket id: ', socket.id);
 
       fetchAllTweets();
     });

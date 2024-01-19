@@ -127,6 +127,28 @@ exports.getMe = async (req, res, next) => {
   });
 };
 
+exports.checkLogin = async (req, res, next) => {
+  // if (!req.cookies.jwt) return next(new AppError('Need to login', 401));
+  let decoded;
+  if (req.cookies.jwt)
+    decoded = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+
+  console.log(decoded);
+
+  if (!decoded) {
+    res.status(404).json({
+      status: 'not logged in',
+      loggedIn: false,
+    });
+    return next();
+  }
+
+  res.status(200).json({
+    status: 'success',
+    loggedIn: true,
+  });
+};
+
 exports.forgotPassword = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {

@@ -8,10 +8,11 @@ const router = express.Router();
 router.post('/signup', authController.signUp);
 router.post('/login', authController.login);
 // router.post("/logout", userController.login);
-router.get('/', userController.getAllUsers);
+router.get('/', userController.getAllUsers); // ! this should be admin only
 
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
+router.get('/isLoggedIn', authController.checkLogin);
 
 // ^ Everything after the .protect requires you to be logged in
 router.use(authController.protect);
