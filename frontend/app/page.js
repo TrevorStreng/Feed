@@ -5,8 +5,7 @@ import axios from 'axios';
 import io from 'socket.io-client';
 
 export default function Home() {
-  // const wsUrl = process.env.WS_URL || 'http://localhost:5001';
-  const wsUrl = 'http://localhost:5001';
+  const wsUrl = process.env.WS_URL || 'http://localhost:5001';
   const socket = io(wsUrl);
   // const socket = io(wsUrl, { withCredentials: true });
   const [tweet, setTweet] = useState('');

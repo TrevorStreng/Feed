@@ -1,14 +1,15 @@
 const { createServer } = require('http');
 const express = require('express');
 const socketIo = require('socket.io');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: './.env' });
 
 const wsApp = express();
 const wsServer = createServer(wsApp);
-// console.log(process.env.FRONTEND_URL);
 const io = socketIo(wsServer, {
   cors: {
-    // origin: process.env.FRONTEND_URL,
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL,
     // methods: ['GET', 'POST', 'PATCH', 'HEAD'],
     // credentials: true,
   },
