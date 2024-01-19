@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useRouter, usePathname } from 'next/navigation';
 
 export default function Login() {
-  const url = process.env.URL;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
@@ -48,18 +47,20 @@ export default function Login() {
         username: username,
         password: password,
       };
-  
+
       const res = await axios.post(`/api/users/login`, body, {
         withCredentials: true,
       });
-  
-      // const setCookieHeader = res.headers['set-cookie']; 
+
+      console.log(res);
+
+      // const setCookieHeader = res.headers['set-cookie'];
       console.log(
         `Logging in with username: ${username} and password: ${password}`
       );
-  
+
       // Any authentication stuff here like API calls
-  
+
       // If the login is successful, set isLoggedIn to true
       setIsLoggedIn(true);
     } catch (error) {
@@ -67,7 +68,7 @@ export default function Login() {
       // Display error message to the user
     }
     setIsLoading(false);
-  };    
+  };
 
   const handleRegister = async () => {
     setIsLoading(true);

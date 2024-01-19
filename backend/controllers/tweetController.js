@@ -1,6 +1,7 @@
 const Tweet = require('./../models/tweetModel');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
+const WebSocketService = require('../services/webSocketServices');
 
 exports.getAllTweets = async (req, res, next) => {
   const tweets = await Tweet.find({});
@@ -27,6 +28,9 @@ exports.createTweet = async (req, res, next) => {
     message: message,
     // tags: req.body.tags.split(' '),
   });
+  // Emit listeners of new message
+  WebSocketService.emitNewPost(newTweet);
+
   res.status(201).json({
     status: 'You wrote a tweet!',
     data: {

@@ -9,6 +9,24 @@ const nextConfig = {
       },
     ];
   },
+  async headers() {
+    return [
+      {
+        // Add a WebSocket upgrade rule
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Upgrade',
+            value: 'websocket',
+          },
+          {
+            key: 'Connection',
+            value: 'Upgrade',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

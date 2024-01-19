@@ -1,3 +1,4 @@
+// REST API SERVER
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
@@ -13,7 +14,15 @@ const DB = process.env.DATABASE.replace(
 mongoose.connect(DB).then(() => {
   console.log(`DB connection successful 😁`);
 });
-const port = process.env.PORT || 5000;
-const server = app.listen(port, () => {
-  console.log(`App is running on port ${port}...`);
+const restPort = process.env.REST_PORT || 5000;
+const restServer = app.listen(restPort, () => {
+  console.log(`App is running on port ${restPort}...`);
+});
+
+// WEB SOCKET SERVER
+const { wsServer } = require('./socket');
+
+const wsPort = process.env.WS_PORT || 5001;
+wsServer.listen(wsPort, () => {
+  console.log(`Websocket server running on port ${wsPort}...`);
 });

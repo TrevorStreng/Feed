@@ -2,19 +2,28 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
+import io from 'socket.io-client';
 
 export default function Home() {
-  const url = process.env.URL;
+  // const wsUrl = process.env.WS_URL || 'http://localhost:5001';
+  const wsUrl = 'http://localhost:5001';
+  const socket = io(wsUrl);
+  // const socket = io(wsUrl, { withCredentials: true });
   const [tweet, setTweet] = useState('');
   const [tweets, setTweets] = useState([]);
-
   const handleTweetChange = (event) => {
     setTweet(event.target.value);
   };
+
+  useEffect(() => {
+    // const socket = io(wsUrl);
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
   const fetchAllTweets = async () => {
     try {
       const res = await axios.get(`/api/tweets`);
-
       let tweetArr = res.data.tweets;
       tweetArr = tweetArr.reverse();
 
@@ -23,6 +32,10 @@ export default function Home() {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    fetchAllTweets();
+  }, []);
 
   const getUserFromToken = async () => {
     try {
@@ -43,14 +56,29 @@ export default function Home() {
         // tags ,
       };
       const res = await axios.post(`/api/tweets/createTweet`, body);
+      webSocketUpdate();
     } catch (err) {
       console.error(err);
     }
   };
 
+  // WebSocket connection
+  const webSocketUpdate = () => {
+    socket.on('new-post', (data) => {
+      console.log('WebSocket connection established:', socket.connected);
+      console.log('New post: ', data);
+      console.log('socket id: ', socket.id);
+
+      fetchAllTweets();
+    });
+    return () => socket.disconnect();
+    //  socket.off('new-post', () => {
+    //   console.log('new post socket off...');
+    // });
+  };
   useEffect(() => {
-    fetchAllTweets();
-  }, []);
+    webSocketUpdate();
+  });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">
