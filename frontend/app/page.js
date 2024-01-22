@@ -14,12 +14,12 @@ export default function Home() {
     setTweet(event.target.value);
   };
 
-  useEffect(() => {
-    // const socket = io(wsUrl);
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  // useEffect(() => {
+  //   // const socket = io(wsUrl);
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
   const fetchAllTweets = async () => {
     try {
       const res = await axios.get(`/api/tweets`);
@@ -55,8 +55,23 @@ export default function Home() {
         // tags ,
       };
       const res = await axios.post(`/api/tweets/createTweet`, body);
-      webSocketUpdate();
+      // webSocketUpdate();
       setTweet('');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const likeTweet = async (tweetId) => {
+    try {
+      const userId = await getUserFromToken();
+
+      const body = {
+        userId: userId,
+      };
+      const res = await axios.patch(`api/tweets/${tweetId}/like`, body);
+      // webSocketUpdate();
+      // setTweets(tweets);
     } catch (err) {
       console.error(err);
     }
@@ -64,6 +79,7 @@ export default function Home() {
 
   // WebSocket connection
   const webSocketUpdate = () => {
+    console.log('here');
     socket.on('new-post', (data) => {
       // console.log('WebSocket connection established:', socket.connected);
       // console.log('New post: ', data);
@@ -78,7 +94,7 @@ export default function Home() {
   };
   useEffect(() => {
     webSocketUpdate();
-  });
+  }, [tweets]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">
@@ -153,6 +169,11 @@ export default function Home() {
                         </div>
                       ))}
                       </div> */}
+                  <div className="flex">
+                    <button onClick={() => likeTweet(el._id)}>like</button>
+                    <p className="px-3">{el.likes.count}</p>
+                    <button>dislike</button>
+                  </div>
                 </div>
               </div>
             </div>

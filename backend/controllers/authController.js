@@ -1,11 +1,19 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const crypto = require('crypto');
+const validator = require('validator');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const email = require('./../utils/email');
 
 dotenv.config({ path: './../.env' });
+
+// & to do list
+// // 1. check for valid email
+// // 2. check password length
+// 3. add likes and comments to posts
+// 4. go live
+// 5. notifications
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -35,7 +43,7 @@ const createAndSendToken = (user, statusCode, res) => {
 
   // remove password from data
   user.password = undefined;
-  console.log(token);
+  // console.log(token);
   console.log('logged in');
 
   res.status(statusCode).json({
@@ -52,6 +60,7 @@ exports.login = async (req, res, next) => {
   if (!user) {
     return next(new AppError('User not found.', 404));
   }
+  // console.log(user);
   if (!(await user.verifyPassword(password, user.password)))
     return next(new AppError('Incorrect Password!', 401));
 
@@ -72,13 +81,22 @@ const checkUsername = async (username) => {
 };
 
 exports.signUp = async (req, res, next) => {
-  const { username, email } = req.body;
+  const { username, email, password } = req.body;
   if (!(await checkEmail(email))) {
     return next(new AppError('Email already in use..', 401));
   }
   if (!(await checkUsername(username))) {
     return next(new AppError('Username already in use..', 401));
   }
+  if (!validator.isEmail(email)) {
+    return next(new AppError('Please use a valid email..', 401));
+  }
+  if (password.length < 8) {
+    return next(
+      new AppError('Password length must be at least 8 characters..', 401)
+    );
+  }
+
   const newUser = await User.create(
     // req.body //this is unsecure and can allow anyone to be admin
     {
@@ -88,6 +106,7 @@ exports.signUp = async (req, res, next) => {
       confirmPassword: req.body.confirmPassword,
     }
   );
+  console.log('New account created');
   createAndSendToken(newUser, 201, res);
 };
 

@@ -18,6 +18,13 @@ const tweetSchema = new Schema({
   // tags: {
   //   type: [String],
   // },
+  likes: {
+    count: { type: Number, default: 0 },
+    users: [{ type: Schema.Types.ObjectId, ref: 'User', default: 111 }],
+  },
+  // comments: {
+  //   type: [String],
+  // },
 });
 
 const Tweet = mongoose.model('Tweet', tweetSchema);

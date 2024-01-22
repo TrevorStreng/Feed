@@ -56,3 +56,30 @@ exports.deleteTweet = async (req, res, next) => {
     },
   });
 };
+
+exports.likeTweet = async (req, res, next) => {
+  const { userId } = req.body;
+  const tweetId = req.params.tweetId;
+  console.log(tweetId);
+
+  if (!userId) return next(new AppError('Must be signed in', 409));
+  if (!tweetId) return next(new AppError('No post id', 404));
+
+  const tweet = await Tweet.findById(tweetId);
+  if (!tweet) return next(new AppError('Post not found', 404));
+
+  WebSocketService.emitNewPost(tweet);
+
+  if (!tweet.likes.users.includes(userId)) {
+    tweet.likes.users.push(userId);
+    tweet.likes.count++;
+    await tweet.save();
+  } else {
+    return next(new AppError('You have already liked this post..', 401));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    likes: tweet.likes,
+  });
+};

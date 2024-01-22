@@ -2,20 +2,26 @@ const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const validator = require('validator');
 const AppError = require('../utils/appError');
 
 const userSchema = new Schema({
   username: {
     type: String,
     required: [true, 'Please choose a username'],
+    unique: true,
   },
   email: {
     type: String,
     required: [true, 'Please provide an email'],
+    unique: true,
+    validate: [validator.isEmail, 'Please provide a valid email'],
   },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
+    minlength: 8,
+    // select: false,
   },
   confirmPassword: {
     type: String,
@@ -42,16 +48,18 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 12);
-  }
+  if (!this.isModified('password')) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+
+  this.confirmPassword = undefined;
   next();
 });
 
 userSchema.pre('save', function (next) {
-  if (this.isModified('password') || !this.isNew) {
-    this.passwordChangedAt = Date.now();
-  }
+  if (!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
