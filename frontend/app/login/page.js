@@ -170,7 +170,7 @@ export default function Login() {
             </label>
             {isRegistering && (
               <label className="block mb-4">
-                confirm password:
+                Confirm Password:
                 <input
                   className="border w-full p-2 mt-1"
                   type={showPassword ? 'text' : 'password'}
