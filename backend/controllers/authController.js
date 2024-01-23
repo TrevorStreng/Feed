@@ -11,7 +11,9 @@ dotenv.config({ path: './../.env' });
 // & to do list
 // // 1. check for valid email
 // // 2. check password length
-// 3. add likes and comments to posts
+// // 3. dislike button
+// 4. add comments
+// // 5 figure out why there are so many web socket connections
 // 4. go live
 // 5. notifications
 

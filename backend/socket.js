@@ -11,7 +11,7 @@ const io = socketIo(wsServer, {
   cors: {
     origin: process.env.FRONTEND_URL,
     // methods: ['GET', 'POST', 'PATCH', 'HEAD'],
-    // credentials: true,
+    credentials: true,
   },
 });
 

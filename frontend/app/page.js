@@ -6,20 +6,12 @@ import io from 'socket.io-client';
 
 export default function Home() {
   const wsUrl = process.env.WS_URL || 'http://localhost:5001';
-  const socket = io(wsUrl);
-  // const socket = io(wsUrl, { withCredentials: true });
   const [tweet, setTweet] = useState('');
   const [tweets, setTweets] = useState([]);
   const handleTweetChange = (event) => {
     setTweet(event.target.value);
   };
 
-  // useEffect(() => {
-  //   // const socket = io(wsUrl);
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
   const fetchAllTweets = async () => {
     try {
       const res = await axios.get(`/api/tweets`);
@@ -55,7 +47,6 @@ export default function Home() {
         // tags ,
       };
       const res = await axios.post(`/api/tweets/createTweet`, body);
-      // webSocketUpdate();
       setTweet('');
     } catch (err) {
       console.error(err);
@@ -70,31 +61,31 @@ export default function Home() {
         userId: userId,
       };
       const res = await axios.patch(`api/tweets/${tweetId}/like`, body);
-      // webSocketUpdate();
-      // setTweets(tweets);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const dislikeTweet = async (tweetId) => {
+    try {
+      const userId = await getUserFromToken();
+
+      const body = {
+        userId: userId,
+      };
+      const res = await axios.patch(`api/tweets/${tweetId}/unlike`, body);
     } catch (err) {
       console.error(err);
     }
   };
 
   // WebSocket connection
-  const webSocketUpdate = () => {
-    console.log('here');
+  useEffect(() => {
+    const socket = io(wsUrl, { withCredentials: true });
     socket.on('new-post', (data) => {
-      // console.log('WebSocket connection established:', socket.connected);
-      // console.log('New post: ', data);
-      // console.log('socket id: ', socket.id);
-
       fetchAllTweets();
     });
     return () => socket.disconnect();
-    //  socket.off('new-post', () => {
-    //   console.log('new post socket off...');
-    // });
-  };
-  useEffect(() => {
-    webSocketUpdate();
-  }, [tweets]);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">
@@ -172,7 +163,9 @@ export default function Home() {
                   <div className="flex">
                     <button onClick={() => likeTweet(el._id)}>like</button>
                     <p className="px-3">{el.likes.count}</p>
-                    <button>dislike</button>
+                    <button onClick={() => dislikeTweet(el._id)}>
+                      dislike
+                    </button>
                   </div>
                 </div>
               </div>
