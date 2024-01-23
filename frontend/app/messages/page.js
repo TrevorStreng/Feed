@@ -5,26 +5,31 @@ import { formatDistanceToNow } from 'date-fns';
 export default function Messages() {
   const [messages, setMessages] = useState(() => {
     // Try to get messages from localStorage
-    const savedMessages = localStorage.getItem('messages');
-    if (savedMessages) {
-      return JSON.parse(savedMessages);
-    } else {
-      return [
-        {
-          id: 1,
-          sender: 'John Doe',
-          text: 'Hey, how are you?',
-          timestamp: new Date(),
-        },
-        {
-          id: 2,
-          sender: 'Jane Smith',
-          text: 'I loved your recent post!',
-          timestamp: new Date(),
-        },
-        // Add more message data as needed
-      ];
-    }
+    // let savedMessages;
+    // try {
+    //   savedMessages = localStorage.getItem('messages');
+    //   if (savedMessages) {
+    //     return JSON.parse(savedMessages);
+    //   } else {
+    return [
+      {
+        id: 1,
+        sender: 'John Doe',
+        text: 'Hey, how are you?',
+        timestamp: new Date(),
+      },
+      {
+        id: 2,
+        sender: 'Jane Smith',
+        text: 'I loved your recent post!',
+        timestamp: new Date(),
+      },
+      // Add more message data as needed
+    ];
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    // }
   });
 
   const [newMessage, setNewMessage] = useState('');
