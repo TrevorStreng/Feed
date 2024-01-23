@@ -5,7 +5,8 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:5000/api/:path*', // Adjust the target URL as needed
+        destination: `${process.env.NEXT_PUBLIC_URL}/:path*`, // Adjust the target URL as needed
+        // destination: 'http://localhost:5000/api/:path*', // Adjust the target URL as needed
       },
     ];
   },
