@@ -90,6 +90,7 @@ functions:
       EMAIL_PASSWORD: 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
       EMAIL_HOST: smtp.sendgrid.net
       EMAIL_PORT: 587
+      FRONTEND_URL: https://feed-mocha-six.vercel.app/
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:

@@ -7,7 +7,6 @@ import io from 'socket.io-client';
 export default function Home() {
   const url = process.env.URL || 'http://localhost:5001';
   const wsUrl = process.env.WS_URL || 'http://localhost:5001';
-  console.log(url);
   const [tweet, setTweet] = useState('');
   const [tweets, setTweets] = useState([]);
   const handleTweetChange = (event) => {
@@ -15,6 +14,7 @@ export default function Home() {
   };
 
   const fetchAllTweets = async () => {
+    console.log(url);
     try {
       const res = await axios.get(`${url}/api/tweets`);
       let tweetArr = res.data.tweets;
