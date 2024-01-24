@@ -104,7 +104,7 @@ export default function Login() {
         email: email,
       };
       // Forgot password logic stuff here
-      const res = await axios.post(`${url}api/users/forgotPassword`, body, {
+      const res = await axios.post(`api/users/forgotPassword`, body, {
         withCredentials: true,
       });
 
