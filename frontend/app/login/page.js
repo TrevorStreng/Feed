@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useRouter, usePathname } from 'next/navigation';
 
 export default function Login() {
+  const url = process.env.URL || 'http://localhost:5000';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
@@ -48,7 +49,7 @@ export default function Login() {
         password: password,
       };
 
-      const res = await axios.post(`/api/users/login`, body, {
+      const res = await axios.post(`api/users/login`, body, {
         withCredentials: true,
       });
 
@@ -81,7 +82,7 @@ export default function Login() {
         confirmPassword: confirmPassword,
       };
 
-      const res = await axios.post(`/api/users/signup`, body, {
+      const res = await axios.post(`api/users/signup`, body, {
         withCredentials: true,
       });
 
@@ -103,7 +104,7 @@ export default function Login() {
         email: email,
       };
       // Forgot password logic stuff here
-      const res = await axios.post(`/api/users/forgotPassword`, body, {
+      const res = await axios.post(`api/users/forgotPassword`, body, {
         withCredentials: true,
       });
 
