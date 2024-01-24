@@ -122,6 +122,7 @@ exports.protect = async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
+  console.log(token);
   if (!token) return next(new AppError('You need to be logged in.💥', 401));
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
