@@ -14,8 +14,8 @@ const app = express();
 app.set('trust proxy', 1); // ! need to update for prod
 
 const corsOptions = {
-  // origin: 'https://feed-mocha-six.vercel.app',
-  origin: 'http://localhost:3000',
+  origin: 'https://feed-mocha-six.vercel.app',
+  // origin: 'http://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Enable credentials
 };
