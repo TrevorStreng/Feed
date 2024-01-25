@@ -33,7 +33,7 @@ export default function Home() {
 
   const getUserFromToken = async () => {
     try {
-      const res = await axios.get(`${url}api/users/me`);
+      const res = await axios.get(`api/users/me`);
       return res.data.userId;
     } catch (err) {
       console.error(err);
@@ -49,7 +49,7 @@ export default function Home() {
         message: tweet,
         // tags ,
       };
-      const res = await axios.post(`${url}api/tweets/createTweet`, body);
+      const res = await axios.post(`api/tweets/createTweet`, body);
       setTweet('');
     } catch (err) {
       console.error(err);
@@ -63,7 +63,7 @@ export default function Home() {
       const body = {
         userId: userId,
       };
-      const res = await axios.patch(`${url}api/tweets/${tweetId}/like`, body);
+      const res = await axios.patch(`api/tweets/${tweetId}/like`, body);
     } catch (err) {
       console.error(err);
     }
@@ -75,7 +75,7 @@ export default function Home() {
       const body = {
         userId: userId,
       };
-      const res = await axios.patch(`${url}api/tweets/${tweetId}/unlike`, body);
+      const res = await axios.patch(`api/tweets/${tweetId}/unlike`, body);
     } catch (err) {
       console.error(err);
     }
