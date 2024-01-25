@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import io from 'socket.io-client';
+import { ThumbsUp, ThumbsDown } from 'react-feather';
 
 export default function Home() {
   const url = process.env.NEXT_PUBLIC_URL || 'http://localhost:5000';
@@ -163,10 +164,18 @@ export default function Home() {
                       ))}
                       </div> */}
                   <div className="flex">
-                    <button onClick={() => likeTweet(el._id)}>like</button>
-                    <p className="px-3">{el.likes.count}</p>
-                    <button onClick={() => dislikeTweet(el._id)}>
-                      dislike
+                    <button
+                      onClick={() => likeTweet(el._id)}
+                      className="flex items-center text-blue-500 hover:text-blue-700 focus:outline-none mr-2"
+                    >
+                      <ThumbsUp size={18} className="mr-1" />
+                      <span className="px-1">{el.likes.count}</span>
+                    </button>
+                    <button
+                      onClick={() => dislikeTweet(el._id)}
+                      className="flex items-center text-red-500 hover:text-red-700 focus:outline-none"
+                    >
+                      <ThumbsDown size={18} className="mr-1" />
                     </button>
                   </div>
                 </div>
