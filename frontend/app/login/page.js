@@ -49,7 +49,7 @@ export default function Login() {
         password: password,
       };
 
-      const res = await axios.post(`api/users/login`, body, {
+      const res = await axios.post(`${url}api/users/login`, body, {
         withCredentials: true,
       });
 
@@ -82,7 +82,7 @@ export default function Login() {
         confirmPassword: confirmPassword,
       };
 
-      const res = await axios.post(`api/users/signup`, body, {
+      const res = await axios.post(`${url}api/users/signup`, body, {
         withCredentials: true,
       });
 
