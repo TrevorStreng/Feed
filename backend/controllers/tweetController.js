@@ -30,7 +30,7 @@ exports.createTweet = async (req, res, next) => {
     // tags: req.body.tags.split(' '),
   });
   // Emit listeners of new message
-  WebSocketService.emitNewPost(newTweet);
+  // WebSocketService.emitNewPost(newTweet);
 
   res.status(201).json({
     status: 'You wrote a tweet!',

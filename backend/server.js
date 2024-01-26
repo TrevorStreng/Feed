@@ -20,9 +20,9 @@ const restServer = app.listen(restPort, () => {
 });
 
 // WEB SOCKET SERVER
-const { wsServer } = require('./socket');
+// const { wsServer } = require('./socket');
 
-const wsPort = process.env.WS_PORT || 5001;
-wsServer.listen(wsPort, () => {
-  console.log(`Websocket server running on port ${wsPort}...`);
-});
+// const wsPort = process.env.WS_PORT || 5001;
+// wsServer.listen(wsPort, () => {
+//   console.log(`Websocket server running on port ${wsPort}...`);
+// });
