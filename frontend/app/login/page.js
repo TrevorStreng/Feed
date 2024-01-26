@@ -130,54 +130,59 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
       <div className="bg-white p-8 rounded shadow-md w-96">
+        <div className="text-center">
+          <h4 className="mb-8 mt-1 pb-1 text-xl font-semibold">
+            Welcome to Feed! 🌱
+          </h4>
+        </div>
         <h1 className="text-2xl font-bold mb-4">
           {isRegistering ? 'Register' : 'Login'}
         </h1>
-        <form>
+        <form className="space-y-4">
           <label className="block mb-4">
-            Username:
             <input
-              className="border w-full p-2 mt-1"
+              className="border w-full p-2 mt-1 shadow-md"
               type="text"
               value={username}
               onChange={handleUsernameChange}
+              placeholder="Username"
               aria-label="Username"
             />
           </label>
           {isRegistering && (
             <label className="block mb-4">
-              Email:
               <input
-                className="border w-full p-2 mt-1"
+                className="border w-full p-2 mt-1 shadow-md"
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
+                placeholder="Email"
                 aria-label="Email"
               />
             </label>
           )}
-          <div className="flex flex-col items-end">
+          <div className="block">
             <label className="block mb-4">
-              Password:
               <input
-                className="border w-full p-2 mt-1"
+                className="border w-full p-2 mt-1 shadow-md"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={handlePasswordChange}
+                placeholder="Password"
                 aria-label="Password"
               />
             </label>
             {isRegistering && (
               <label className="block mb-4">
-                Confirm Password:
                 <input
-                  className="border w-full p-2 mt-1"
+                  className="border w-full p-2 mt-1 shadow-md"
                   type={showPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={handleconfirmPasswordChange}
-                  aria-label="Email"
+                  placeholder="Confirm Password"
+                  aria-label="Confirm Password"
                 />
               </label>
             )}
