@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter, usePathname } from 'next/navigation';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export default function Login() {
   const url = process.env.URL || 'http://localhost:5000';
@@ -13,6 +14,7 @@ export default function Login() {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleUsernameChange = (e) => {
@@ -129,6 +131,10 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
       <div className="bg-white p-8 rounded shadow-md w-96">
@@ -163,7 +169,7 @@ export default function Login() {
               />
             </label>
           )}
-          <div className="block">
+          <div className="block relative">
             <label className="block mb-4">
               <input
                 className="border w-full p-2 mt-1 shadow-md"
@@ -173,26 +179,31 @@ export default function Login() {
                 placeholder="Password"
                 aria-label="Password"
               />
+              <span
+                className="absolute right-2 top-4 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
             </label>
             {isRegistering && (
-              <label className="block mb-4">
+              <label className="block mb-4 relative">
                 <input
                   className="border w-full p-2 mt-1 shadow-md"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={handleconfirmPasswordChange}
                   placeholder="Confirm Password"
                   aria-label="Confirm Password"
                 />
+                <span
+                  className="absolute right-2 top-4 cursor-pointer"
+                  onClick={toggleConfirmPasswordVisibility}
+                >
+                  {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
               </label>
             )}
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="text-blue-500 text-sm"
-            >
-              {showPassword ? 'Hide Password' : 'Show Password'}
-            </button>
           </div>
 
           <button
