@@ -10,6 +10,7 @@ export default function Home() {
   const wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:5001';
   const [tweet, setTweet] = useState('');
   const [tweets, setTweets] = useState([]);
+  const [changed, setChanged] = useState(false);
   const handleTweetChange = (event) => {
     setTweet(event.target.value);
   };
@@ -51,6 +52,7 @@ export default function Home() {
       };
       const res = await axios.post(`api/tweets/createTweet`, body);
       setTweet('');
+      setChanged(true);
     } catch (err) {
       console.error(err);
     }
@@ -64,6 +66,7 @@ export default function Home() {
         userId: userId,
       };
       const res = await axios.patch(`api/tweets/${tweetId}/like`, body);
+      setChanged(true);
     } catch (err) {
       console.error(err);
     }
@@ -76,6 +79,7 @@ export default function Home() {
         userId: userId,
       };
       const res = await axios.patch(`api/tweets/${tweetId}/unlike`, body);
+      setChanged(true);
     } catch (err) {
       console.error(err);
     }
@@ -83,12 +87,15 @@ export default function Home() {
 
   // WebSocket connection
   useEffect(() => {
-    const socket = io(wsUrl, { withCredentials: true });
-    socket.on('new-post', (data) => {
-      fetchAllTweets();
-    });
-    return () => socket.disconnect();
-  }, []);
+    // console.log(wsUrl);
+    // const socket = io(wsUrl, { withCredentials: true });
+    // socket.on('new-post', (data) => {
+    //   fetchAllTweets();
+    // });
+    // return () => socket.disconnect();
+    fetchAllTweets();
+    return () => setChanged(false);
+  }, [changed]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">

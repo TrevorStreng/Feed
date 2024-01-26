@@ -88,9 +88,9 @@ export default function Login() {
         withCredentials: true,
       });
 
-      console.log(
-        `Registering with username: ${username}, email: ${email}, password: ${password} and confirmPassword: ${confirmPassword}`
-      );
+      // console.log(
+      //   `Registering with username: ${username}, email: ${email}, password: ${password} and confirmPassword: ${confirmPassword}`
+      // );
       // API calls or anything here
     } catch (error) {
       console.error(error);
