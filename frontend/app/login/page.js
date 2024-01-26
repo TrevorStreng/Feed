@@ -248,12 +248,12 @@ export default function Login() {
             <h1 className="text-2xl font-bold mb-4">Forgot Password</h1>
             <p>Enter your email to reset your password.</p>
             <label className="block mt-4">
-              Email:
               <input
                 className="border w-full p-2 mt-1"
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
+                placeholder="Email"
                 aria-label="Email"
               />
             </label>
