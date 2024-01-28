@@ -173,7 +173,7 @@ export default function Login() {
           <div className="block relative">
             <label className="block mb-4">
               <input
-                className="border w-full p-2 mt-1 shadow-md"
+                className="border w-full p-2 mt-1 shadow-md pr-7"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={handlePasswordChange}
@@ -190,7 +190,7 @@ export default function Login() {
             {isRegistering && (
               <label className="block mb-4 relative">
                 <input
-                  className="border w-full p-2 mt-1 shadow-md"
+                  className="border w-full p-2 mt-1 shadow-md pr-7"
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={handleconfirmPasswordChange}
