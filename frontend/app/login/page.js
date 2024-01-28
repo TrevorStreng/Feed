@@ -268,7 +268,7 @@ export default function Login() {
             </button>
             <p className="mt-4">
               <span
-                className="text-blue-500 cursor-pointer"
+                className="text-red-500 cursor-pointer"
                 onClick={toggleForgotPassword}
               >
                 Cancel
