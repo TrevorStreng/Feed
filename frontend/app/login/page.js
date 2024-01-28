@@ -137,11 +137,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
-      <div className="bg-white p-8 rounded shadow-md w-96">
+      <div className="bg-white p-8 rounded shadow-md flex flex-col space-y-8 w-full max-w-lg">
+        {' '}
+        {/* Adjusted the classes */}
         <div className="text-center">
-          <h4 className="mb-8 mt-1 pb-1 text-xl font-semibold">
-            Welcome to Feed! 🌱
-          </h4>
+          <h4 className="text-xl font-semibold">Welcome to Feed! 🌱</h4>
+          <h5 className="text-sm text-gray-300">Pasce Cogitationes Tuas</h5>
         </div>
         <h1 className="text-2xl font-bold mb-4">
           {isRegistering ? 'Register' : 'Login'}
