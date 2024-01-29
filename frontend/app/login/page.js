@@ -58,9 +58,6 @@ export default function Login() {
       console.log(res);
 
       // const setCookieHeader = res.headers['set-cookie'];
-      console.log(
-        `Logging in with username: ${username} and password: ${password}`
-      );
 
       // Any authentication stuff here like API calls
 
@@ -87,10 +84,6 @@ export default function Login() {
       const res = await axios.post(`api/users/signup`, body, {
         withCredentials: true,
       });
-
-      // console.log(
-      //   `Registering with username: ${username}, email: ${email}, password: ${password} and confirmPassword: ${confirmPassword}`
-      // );
       // API calls or anything here
     } catch (error) {
       console.error(error);
