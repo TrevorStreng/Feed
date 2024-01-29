@@ -73,6 +73,13 @@ export default function Login() {
   const handleRegister = async () => {
     setIsLoading(true);
     try {
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        alert('Registration Failed: Passwords do not match');
+        setIsLoading(false);
+        return;
+      }
+
       // Registering account logic here
       const body = {
         username: username,
