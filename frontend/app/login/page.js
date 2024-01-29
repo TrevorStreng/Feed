@@ -85,9 +85,30 @@ export default function Login() {
         withCredentials: true,
       });
       // API calls or anything here
+
+      // After successful registration, switch back to the login form
+      toggleRegisterMode();
+
+      // Display a popup message to the user
+      alert('Registration Successful');
+
+      // Log a message to the console
+      console.log('User registered successfully');
+
+      // Clear the input fields
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setconfirmPassword('');
     } catch (error) {
       console.error(error);
       // Display error message to user
+
+      // Display a popup message to the user
+      alert('Registration Failed');
+
+      // Log an error message to the console
+      console.error('User registration failed');
     }
     setIsLoading(false);
   };
@@ -241,6 +262,10 @@ export default function Login() {
           <div className="bg-white p-8 rounded shadow-md w-96">
             <h1 className="text-2xl font-bold mb-4">Forgot Password</h1>
             <p>Enter your email to reset your password.</p>
+            <p className="text-xs text-gray-500 mb-4">
+              Didn't receive an email? Make sure to check your junk/spam
+              folders.
+            </p>
             <label className="block mt-4">
               <input
                 className="border w-full p-2 mt-1"
