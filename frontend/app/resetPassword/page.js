@@ -24,13 +24,9 @@ export default function resetPassword() {
         confirmPassword: confirmPassword,
       };
       // Reset password logic stuff here
-      const res = await axios.patch(
-        `${url}/api/users/resetPassword/${token}`,
-        body,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.patch(`api/users/resetPassword/${token}`, body, {
+        withCredentials: true,
+      });
 
       console.log('Forgot password clicked');
       // A modal popup or something that leads to a password recovery page here
