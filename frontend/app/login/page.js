@@ -131,8 +131,8 @@ export default function Login() {
       console.error(error.response.data);
       // Display error message to user
 
-      // Display a popup message to the user
-      alert('Registration Failed');
+      // // Display a popup message to the user
+      // alert('Registration Failed');
 
       // Log an error message to the console
       console.error('User registration failed');
