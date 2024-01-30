@@ -16,20 +16,28 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [passwordLengthError, setPasswordLengthError] = useState(false);
+  const [passwordsMatchError, setPasswordsMatchError] = useState(false);
+  const [usernameInUseError, setUsernameInUseError] = useState(false);
+  const [emailInUseError, setEmailInUseError] = useState(false);
 
   const handleUsernameChange = (e) => {
+    if (usernameInUseError) setUsernameInUseError(false);
     setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
+    if (passwordLengthError) setPasswordLengthError(false);
     setPassword(e.target.value);
   };
 
   const handleEmailChange = (e) => {
+    if (emailInUseError) setEmailInUseError(false);
     setEmail(e.target.value);
   };
 
   const handleconfirmPasswordChange = (e) => {
+    if (passwordsMatchError) setPasswordsMatchError(false);
     setconfirmPassword(e.target.value);
   };
 
@@ -55,13 +63,7 @@ export default function Login() {
         withCredentials: true,
       });
 
-      console.log(res);
-
-      // const setCookieHeader = res.headers['set-cookie'];
-
-      // Any authentication stuff here like API calls
-
-      // If the login is successful, set isLoggedIn to true
+      // location.reload();
       setIsLoggedIn(true);
     } catch (error) {
       console.error(error);
@@ -72,6 +74,16 @@ export default function Login() {
 
   const handleRegister = async () => {
     setIsLoading(true);
+    if (password.length < 8) {
+      setPasswordLengthError(true);
+      setIsLoading(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setPasswordsMatchError(true);
+      setIsLoading(false);
+      return;
+    }
     try {
       // Registering account logic here
       const body = {
@@ -84,9 +96,23 @@ export default function Login() {
       const res = await axios.post(`api/users/signup`, body, {
         withCredentials: true,
       });
-      // API calls or anything here
+      setIsLoggedIn(true);
     } catch (error) {
-      console.error(error);
+      if (error.response.data.status === 'Username already in use.')
+        setUsernameInUseError(true);
+      if (error.response.data.status === 'Email already in use.')
+        setEmailInUseError(true);
+      if (error.response.data.status === 'Please use a valid email.')
+        alert('Please use a valid email.');
+      if (error.response.data.status === 'Password must match.')
+        alert('Password must match.');
+      if (
+        error.response.data.status ===
+        'Password must be longer than 8 characters.'
+      )
+        setPasswordLengthError(true);
+      // alert('Password must be longer than 8 characters');
+      console.error(error.response.data);
       // Display error message to user
     }
     setIsLoading(false);
@@ -150,6 +176,9 @@ export default function Login() {
               placeholder="Username"
               aria-label="Username"
             />
+            {usernameInUseError && (
+              <p className="text-sm text-red-500">Username already in use.</p>
+            )}
           </label>
           {isRegistering && (
             <label className="block mb-4">
@@ -161,6 +190,9 @@ export default function Login() {
                 placeholder="Email"
                 aria-label="Email"
               />
+              {emailInUseError && (
+                <p className="text-sm text-red-500">Username already in use.</p>
+              )}
             </label>
           )}
           <div className="block relative">
@@ -179,9 +211,14 @@ export default function Login() {
               >
                 {showPassword ? <FaEye /> : <FaEyeSlash />}
               </span>
+              {passwordLengthError && (
+                <p className="text-sm text-red-500">
+                  Password must be longer then 8 characters
+                </p>
+              )}
             </label>
             {isRegistering && (
-              <label className="block mb-4 relative">
+              <label className="block relative">
                 <input
                   className="border w-full p-2 mt-1 shadow-md pr-7"
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -196,6 +233,9 @@ export default function Login() {
                 >
                   {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
                 </span>
+                {passwordsMatchError && (
+                  <p className="text-sm text-red-500">Passwords must match</p>
+                )}
               </label>
             )}
           </div>

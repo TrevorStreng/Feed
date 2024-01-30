@@ -14,7 +14,7 @@ dotenv.config({ path: './../.env' });
 // // 3. dislike button
 // 4. add comments
 // // 5 figure out why there are so many web socket connections
-// 4. go live
+// // 4. go live
 // 5. notifications
 
 const signToken = (id) => {
@@ -69,6 +69,18 @@ exports.login = async (req, res, next) => {
   createAndSendToken(user, 200, res);
 };
 
+exports.logout = async (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    res.clearCookie('jwt');
+    res.status(200).json({
+      status: 'Logged out successfully!',
+    });
+  } else {
+    return next(new AppError('No token provided..', 400));
+  }
+};
+
 const checkEmail = async (email) => {
   const exisitingEmail = await User.findOne({ email });
 
@@ -83,20 +95,36 @@ const checkUsername = async (username) => {
 };
 
 exports.signUp = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, confirmPassword } = req.body;
   if (!(await checkEmail(email))) {
-    return next(new AppError('Email already in use..', 401));
+    res.status(401).json({
+      status: 'Email already in use.',
+    });
+    return;
   }
   if (!(await checkUsername(username))) {
-    return next(new AppError('Username already in use..', 401));
+    res.status(401).json({
+      status: 'Username already in use.',
+    });
+    return;
   }
   if (!validator.isEmail(email)) {
-    return next(new AppError('Please use a valid email..', 401));
+    res.status(401).json({
+      status: 'Please use a valid email.',
+    });
+    return;
   }
   if (password.length < 8) {
-    return next(
-      new AppError('Password length must be at least 8 characters..', 401)
-    );
+    res.status(401).json({
+      status: 'Password must be longer than 8 characters.',
+    });
+    return;
+  }
+  if (password !== confirmPassword) {
+    res.status(401).json({
+      status: 'Password must match.',
+    });
+    return;
   }
 
   const newUser = await User.create(

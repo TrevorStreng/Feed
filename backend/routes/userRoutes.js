@@ -8,7 +8,6 @@ const router = express.Router();
 router.post('/signup', authController.signUp);
 router.post('/login', authController.login);
 // router.post("/logout", userController.login);
-router.get('/', userController.getAllUsers); // ! this should be admin only
 
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
@@ -18,5 +17,7 @@ router.get('/isLoggedIn', authController.checkLogin);
 router.use(authController.protect);
 
 router.get('/me', authController.getMe);
+router.post('/logout', authController.logout);
 
+// router.get('/', userController.getAllUsers); // ! this should be admin only
 module.exports = router;

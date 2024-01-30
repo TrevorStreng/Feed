@@ -105,9 +105,9 @@ export default function Home() {
         <div className="bg-white p-4 mb-4 rounded-lg shadow-md">
           <div className="flex space-x-4">
             <Image
-              src="/user-avatar.jpg" // Add the path to the user's avatar image
+              src="/pictures/user-avatar.jpg" // Add the path to the user's avatar image
               alt="User Avatar"
-              className="rounded-full"
+              className="rounded-full w-14 h-14"
               width={40}
               height={40}
             />
@@ -153,9 +153,9 @@ export default function Home() {
             <div key={index} className="bg-white p-4 mb-4 rounded-lg shadow-md">
               <div className="flex space-x-4">
                 <Image
-                  src="/tweet-avatar.jpg" // Add the path to the tweet author's avatar image
+                  src="/pictures/user-avatar.jpg" // Add the path to the tweet author's avatar image
                   alt="Tweet Author Avatar"
-                  className="rounded-full"
+                  className="rounded-full w-14 h-14"
                   width={40}
                   height={40}
                 />
