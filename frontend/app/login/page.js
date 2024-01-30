@@ -20,9 +20,12 @@ export default function Login() {
   const [passwordsMatchError, setPasswordsMatchError] = useState(false);
   const [usernameInUseError, setUsernameInUseError] = useState(false);
   const [emailInUseError, setEmailInUseError] = useState(false);
+  const [emailEmptyError, setEmailEmptyError] = useState(false);
+  const [usernameEmptyError, setUsernameEmptyError] = useState(false);
 
   const handleUsernameChange = (e) => {
     if (usernameInUseError) setUsernameInUseError(false);
+    if (usernameEmptyError) setUsernameEmptyError(false);
     setUsername(e.target.value);
   };
 
@@ -33,6 +36,7 @@ export default function Login() {
 
   const handleEmailChange = (e) => {
     if (emailInUseError) setEmailInUseError(false);
+    if (emailEmptyError) setEmailInUseError(false);
     setEmail(e.target.value);
   };
 
@@ -83,6 +87,14 @@ export default function Login() {
       setPasswordsMatchError(true);
       setIsLoading(false);
       return;
+    }
+    if (email === '') {
+      setEmailEmptyError(true);
+      setIsLoading(false);
+    }
+    if (username === '') {
+      setUsernameEmptyError(true);
+      setIsLoading(false);
     }
     try {
       // Registering account logic here
@@ -198,6 +210,9 @@ export default function Login() {
               placeholder="Username"
               aria-label="Username"
             />
+            {usernameEmptyError && (
+              <p className="text-sm text-red-500">Please provide a username.</p>
+            )}
             {usernameInUseError && (
               <p className="text-sm text-red-500">Username already in use.</p>
             )}
@@ -212,8 +227,11 @@ export default function Login() {
                 placeholder="Email"
                 aria-label="Email"
               />
+              {emailEmptyError && (
+                <p className="text-sm text-red-500">Please provide email.</p>
+              )}
               {emailInUseError && (
-                <p className="text-sm text-red-500">Username already in use.</p>
+                <p className="text-sm text-red-500">Email already in use.</p>
               )}
             </label>
           )}
