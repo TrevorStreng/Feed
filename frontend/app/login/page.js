@@ -74,6 +74,16 @@ export default function Login() {
 
   const handleRegister = async () => {
     setIsLoading(true);
+    if (password.length < 8) {
+      setPasswordLengthError(true);
+      setIsLoading(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setPasswordsMatchError(true);
+      setIsLoading(false);
+      return;
+    }
     try {
       // Registering account logic here
       const body = {
