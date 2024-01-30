@@ -5,14 +5,14 @@ import axios from 'axios';
 export default function resetPassword() {
   const url = process.env.URL || 'http://localhost:5000';
   const [password, setPassword] = useState('');
-  const [confirmPassword, setconfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
   const handleconfirmPasswordChange = (e) => {
-    setconfirmPassword(e.target.value);
+    setConfirmPassword(e.target.value);
   };
 
   const handleResetPassword = async () => {

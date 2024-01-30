@@ -3,12 +3,15 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const res = await axios.get(`api/users/isLoggedIn`);
+        const res = await axios.get(`api/users/isLoggedIn`, {
+          headers: { 'Cache-Control': 'no-cache' },
+        });
         setIsLoggedIn(res.data.loggedIn);
         return res;
       } catch (err) {
@@ -35,9 +38,6 @@ export default function Navbar() {
       <div className="flex space-x-4">
         <Link href="/notifications" className="hover:text-gray-300">
           Notifications
-        </Link>
-        <Link href="/messages" className="hover:text-gray-300">
-          Messages
         </Link>
         {!isLoggedIn ? (
           <Link href="/login" as="/login" className="hover:text-gray-300">

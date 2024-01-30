@@ -8,7 +8,7 @@ export default function Login() {
   const url = process.env.URL || 'http://localhost:5000';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setconfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -36,13 +36,13 @@ export default function Login() {
 
   const handleEmailChange = (e) => {
     if (emailInUseError) setEmailInUseError(false);
-    if (emailEmptyError) setEmailInUseError(false);
+    if (emailEmptyError) setEmailEmptyError(false);
     setEmail(e.target.value);
   };
 
-  const handleconfirmPasswordChange = (e) => {
+  const handleConfirmPasswordChange = (e) => {
     if (passwordsMatchError) setPasswordsMatchError(false);
-    setconfirmPassword(e.target.value);
+    setConfirmPassword(e.target.value);
   };
 
   const router = useRouter();
@@ -55,9 +55,8 @@ export default function Login() {
   }, [isLoggedIn, pathname]);
 
   const handleLogin = async () => {
-    setIsLoading(true);
     try {
-      // Login logic stuff here
+      setIsLoading(true);
       const body = {
         username: username,
         password: password,
@@ -67,37 +66,43 @@ export default function Login() {
         withCredentials: true,
       });
 
-      // location.reload();
       setIsLoggedIn(true);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
-      // Display error message to the user
+      // Handle error messages in the UI
     }
-    setIsLoading(false);
   };
 
   const handleRegister = async () => {
-    setIsLoading(true);
-    if (password.length < 8) {
-      setPasswordLengthError(true);
-      setIsLoading(false);
-      return;
-    }
-    if (password !== confirmPassword) {
-      setPasswordsMatchError(true);
-      setIsLoading(false);
-      return;
-    }
-    if (email === '') {
-      setEmailEmptyError(true);
-      setIsLoading(false);
-    }
-    if (username === '') {
-      setUsernameEmptyError(true);
-      setIsLoading(false);
-    }
     try {
-      // Registering account logic here
+      setIsLoading(true);
+
+      if (password.length < 8) {
+        setPasswordLengthError(true);
+        setIsLoading(false);
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setPasswordsMatchError(true);
+        setIsLoading(false);
+        return;
+      }
+
+      if (email === '') {
+        setEmailEmptyError(true);
+        setIsLoading(false);
+        return;
+      }
+
+      if (username === '') {
+        setUsernameEmptyError(true);
+        setIsLoading(false);
+        return;
+      }
+
       const body = {
         username: username,
         email: email,
@@ -108,68 +113,64 @@ export default function Login() {
       const res = await axios.post(`api/users/signup`, body, {
         withCredentials: true,
       });
+
       setIsLoggedIn(true);
-      // API calls or anything here
-
-      // After successful registration, switch back to the login form
-      toggleRegisterMode();
-
-      // Display a popup message to the user
       alert('Registration Successful');
-
-      // Log a message to the console
       console.log('User registered successfully');
 
-      // Clear the input fields
       setUsername('');
       setEmail('');
       setPassword('');
-      setconfirmPassword('');
+      setConfirmPassword('');
     } catch (error) {
-      if (error.response.data.status === 'Username already in use.')
+      setIsLoading(false);
+
+      if (error.response.data.status === 'Username already in use.') {
         setUsernameInUseError(true);
-      if (error.response.data.status === 'Email already in use.')
+      }
+
+      if (error.response.data.status === 'Email already in use.') {
         setEmailInUseError(true);
-      if (error.response.data.status === 'Please use a valid email.')
+      }
+
+      if (error.response.data.status === 'Please use a valid email.') {
         alert('Please use a valid email.');
-      if (error.response.data.status === 'Password must match.')
+      }
+
+      if (error.response.data.status === 'Password must match.') {
         alert('Password must match.');
+      }
+
       if (
         error.response.data.status ===
         'Password must be longer than 8 characters.'
-      )
+      ) {
         setPasswordLengthError(true);
-      // alert('Password must be longer than 8 characters');
+      }
+
       console.error(error.response.data);
-      // Display error message to user
-
-      // // Display a popup message to the user
-      // alert('Registration Failed');
-
-      // Log an error message to the console
-      console.error('User registration failed');
+      // Handle error messages in the UI
     }
-    setIsLoading(false);
   };
 
   const handleForgotPassword = async () => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const body = {
         email: email,
       };
-      // Forgot password logic stuff here
+
       const res = await axios.post(`api/users/forgotPassword`, body, {
         withCredentials: true,
       });
 
       console.log('Forgot password clicked');
-      // A modal popup or something that leads to a password recovery page here
+      // Handle success scenario (e.g., show a modal)
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
-      // Display error message to user
+      // Handle error messages in the UI
     }
-    setIsLoading(false);
   };
 
   const toggleRegisterMode = () => {
@@ -191,8 +192,6 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
       <div className="bg-white p-8 rounded shadow-md flex flex-col space-y-8 w-full max-w-lg">
-        {' '}
-        {/* Adjusted the classes */}
         <div className="text-center">
           <h4 className="text-xl font-semibold">Welcome to Feed! 🌱</h4>
           <h5 className="text-sm text-gray-300">Pasce Cogitationes Tuas</h5>
@@ -203,7 +202,9 @@ export default function Login() {
         <form className="space-y-4">
           <label className="block mb-4">
             <input
-              className="border w-full p-2 mt-1 shadow-md"
+              className={`border w-full p-2 mt-1 shadow-md ${
+                usernameEmptyError ? 'border-red-500' : ''
+              }`}
               type="text"
               value={username}
               onChange={handleUsernameChange}
@@ -220,7 +221,9 @@ export default function Login() {
           {isRegistering && (
             <label className="block mb-4">
               <input
-                className="border w-full p-2 mt-1 shadow-md"
+                className={`border w-full p-2 mt-1 shadow-md ${
+                  emailEmptyError ? 'border-red-500' : ''
+                }`}
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
@@ -238,7 +241,9 @@ export default function Login() {
           <div className="block relative">
             <label className="block mb-4">
               <input
-                className="border w-full p-2 mt-1 shadow-md pr-7"
+                className={`border w-full p-2 mt-1 shadow-md pr-7 ${
+                  passwordLengthError ? 'border-red-500' : ''
+                }`}
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={handlePasswordChange}
@@ -253,17 +258,19 @@ export default function Login() {
               </span>
               {passwordLengthError && (
                 <p className="text-sm text-red-500">
-                  Password must be longer then 8 characters
+                  Password must be longer than 8 characters
                 </p>
               )}
             </label>
             {isRegistering && (
               <label className="block relative">
                 <input
-                  className="border w-full p-2 mt-1 shadow-md pr-7"
+                  className={`border w-full p-2 mt-1 shadow-md pr-7 ${
+                    passwordsMatchError ? 'border-red-500' : ''
+                  }`}
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
-                  onChange={handleconfirmPasswordChange}
+                  onChange={handleConfirmPasswordChange}
                   placeholder="Confirm Password"
                   aria-label="Confirm Password"
                 />
