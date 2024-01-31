@@ -20,7 +20,7 @@ const tweetSchema = new Schema({
   // },
   likes: {
     count: { type: Number, default: 0 },
-    users: [{ type: Schema.Types.ObjectId, ref: 'User', default: 111 }],
+    users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   },
   // comments: {
   //   type: [String],

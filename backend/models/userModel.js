@@ -27,6 +27,18 @@ const userSchema = new Schema({
     type: String,
     select: false,
   },
+  notifications: [
+    {
+      type: {
+        type: String,
+        enum: ['like', 'comment'],
+        required: true,
+      },
+      message: {
+        type: String,
+      },
+    },
+  ],
   role: {
     type: String,
     enum: ['admin', 'user'],

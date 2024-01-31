@@ -61,20 +61,35 @@ exports.deleteTweet = async (req, res, next) => {
 exports.likeTweet = async (req, res, next) => {
   const { userId } = req.body;
   const tweetId = req.params.tweetId;
-  console.log(tweetId);
 
   if (!userId) return next(new AppError('Must be signed in', 409));
   if (!tweetId) return next(new AppError('No post id', 404));
 
   const tweet = await Tweet.findById(tweetId);
+  const tweetUser = await User.findOne({ username: tweet.username });
+  if (!tweetUser)
+    return next(new AppError(`Can't find user who posted this..`, 401));
   if (!tweet) return next(new AppError('Post not found', 404));
 
-  WebSocketService.emitNewPost(tweet);
+  // WebSocketService.emitNewPost(tweet);
 
+  // check if user has already liked and increment like and add userid to array
   if (!tweet.likes.users.includes(userId)) {
     tweet.likes.users.push(userId);
     tweet.likes.count++;
     await tweet.save();
+
+    // add notification to user
+    const user = await User.findById(userId);
+    if (!user) return next(new AppError(`Can't find user..`, 401));
+
+    console.log(tweetUser.notifications);
+    // tweetUser.notifications.push('like');
+    tweetUser.notifications.push({
+      type: 'like',
+      message: `${user.username} has liked your post!`,
+    });
+    await tweetUser.save();
   } else {
     return next(new AppError('You have already liked this post..', 401));
   }
@@ -95,7 +110,7 @@ exports.unlikeTweet = async (req, res, next) => {
   const tweet = await Tweet.findById(tweetId);
   if (!tweet) return next(new AppError('Post not found', 404));
 
-  WebSocketService.emitNewPost(tweet);
+  // WebSocketService.emitNewPost(tweet);
 
   if (tweet.likes.users.includes(userId)) {
     for (let i = 0; i < tweet.likes.users.length; i++) {

@@ -62,10 +62,22 @@ export default function Home() {
     try {
       const userId = await getUserFromToken();
 
-      const body = {
+      const likeBody = {
         userId: userId,
       };
-      const res = await axios.patch(`api/tweets/${tweetId}/like`, body);
+      // Add like to tweet and send like notification
+      const res = await axios.patch(`api/tweets/${tweetId}/like`, likeBody);
+
+      // Send notification
+      // const notificationBody = {
+      //   type: 'like',
+      // };
+      // const notifiactionRes = await axios.post(
+      //   `api/users/notification`,
+      //   notificationBody
+      // );
+      // console.log(notifiactionRes);
+
       setChanged(true);
     } catch (err) {
       console.error(err);

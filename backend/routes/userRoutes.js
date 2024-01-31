@@ -19,5 +19,7 @@ router.use(authController.protect);
 router.get('/me', authController.getMe);
 router.post('/logout', authController.logout);
 
+router.get('/notifications', userController.getAllNotifications);
+
 // router.get('/', userController.getAllUsers); // ! this should be admin only
 module.exports = router;

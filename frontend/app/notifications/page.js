@@ -1,7 +1,8 @@
-"use client"
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const NotificationItem = ({ type, content }) => {
+const NotificationItem = ({ type, message }) => {
   return (
     <div className="flex items-center border-b py-2">
       <div className="mr-4">
@@ -12,7 +13,7 @@ const NotificationItem = ({ type, content }) => {
         )}
       </div>
       <div>
-        <p className="text-sm">{content}</p>
+        <p className="text-sm">{message}</p>
       </div>
     </div>
   );
@@ -20,27 +21,30 @@ const NotificationItem = ({ type, content }) => {
 
 // Placeholder for now until we can get it connected to the database
 export default function Notifications() {
-  const notifications = [
-    { type: 'like', content: 'Your post was liked!' },
-    { type: 'reply', content: 'Someone replied to your post!' },
-    // Add more notifications as needed
-  ];
+  // const notifications = [
+  //   { type: 'like', content: 'Your post was liked!' },
+  //   { type: 'reply', content: 'Someone replied to your post!' },
+  //   // Add more notifications as needed
+  // ];
 
-  // Possible database connection idea below
-  /*export default function Notifications() {
-    const [notifications, setNotifications] = useState([]);
-  
-    useEffect(() => {
-      // Fetch notifications from your server or database here
-      // This is just a placeholder, replace with your actual fetch call
-      fetch('/api/notifications')
-        .then(response => response.json())
-        .then(data => setNotifications(data));
-    }, []); // Empty dependency array means this effect runs once on component mount*/
+  const [notifications, setNotifications] = useState([]);
+  const getAllNotifications = async () => {
+    try {
+      const res = await axios.get(`api/users/notifications`);
+
+      setNotifications(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getAllNotifications();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gray-100">
-      <div className="max-w-md mx-auto mt-7 p-4 bg-white rounded-lg shadow-md">
+      <div className="max-w-md mx-auto mt-7 p-4 bg-white rounded-lg shadow-md text-center">
         <h1 className="text-2xl font-bold mb-4">Notifications</h1>
         <div>
           {notifications.map((notification, index) => (
@@ -51,4 +55,3 @@ export default function Notifications() {
     </div>
   );
 }
-
