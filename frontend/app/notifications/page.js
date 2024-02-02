@@ -65,13 +65,13 @@ export default function Notifications() {
       ) : (
         <div className="w-1/2 mx-auto mt-7 bg-white rounded-lg shadow-md text-center border-t border-gray-300">
           <h1 className="text-2xl font-bold p-4">
-            Please Log In to View Notifications
+            Please Login/Register for an Account to View the Home Page
           </h1>
           <a
             href="/login"
             className="mb-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded inline-block"
           >
-            Login
+            Login/Register
           </a>
         </div>
       )}
