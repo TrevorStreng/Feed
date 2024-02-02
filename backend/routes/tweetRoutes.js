@@ -13,6 +13,6 @@ router.use(authController.protect);
 router.post('/createTweet', cors(), tweetController.createTweet);
 router.delete('/deleteTweet', tweetController.deleteTweet);
 router.patch('/:tweetId/like', tweetController.likeTweet);
-router.patch('/:tweetId/unLike', tweetController.unlikeTweet);
+router.patch('/:tweetId/unLike', tweetController.dislikeTweet);
 
 module.exports = router;

@@ -11,15 +11,14 @@ const tweetSchema = new Schema({
     type: String,
     required: [true, 'Must be a user to tweet'],
   },
-  // userId: {
-  //   type: String,
-  //   required: [true, "Must be a user to tweet"],
-  // },
   // tags: {
   //   type: [String],
   // },
   likes: {
     count: { type: Number, default: 0 },
+    users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  },
+  dislikes: {
     users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   },
   // comments: {

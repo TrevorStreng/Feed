@@ -74,7 +74,10 @@ exports.likeTweet = async (req, res, next) => {
   // WebSocketService.emitNewPost(tweet);
 
   // check if user has already liked and increment like and add userid to array
-  if (!tweet.likes.users.includes(userId)) {
+  if (
+    !tweet.likes.users.includes(userId) &&
+    !tweet.dislikes.users.includes(userId)
+  ) {
     tweet.likes.users.push(userId);
     tweet.likes.count++;
     await tweet.save();
@@ -90,8 +93,28 @@ exports.likeTweet = async (req, res, next) => {
       message: `${user.username} has liked your post!`,
     });
     await tweetUser.save();
-  } else {
-    return next(new AppError('You have already liked this post..', 401));
+  } else if (
+    !tweet.likes.users.includes(userId) &&
+    tweet.dislikes.users.includes(userId)
+  ) {
+    // remove dislike
+    for (let i = 0; i < tweet.dislikes.users.length; i++) {
+      if (tweet.dislikes.users[i].equals(userId))
+        tweet.dislikes.users.splice(i, 1);
+    }
+    tweet.likes.users.push(userId);
+    tweet.likes.count += 2;
+    await tweet.save();
+  } else if (
+    tweet.likes.users.includes(userId) &&
+    !tweet.dislikes.users.includes(userId)
+  ) {
+    // unlike if they have already liked
+    for (let i = 0; i < tweet.likes.users.length; i++) {
+      if (tweet.likes.users[i].equals(userId)) tweet.likes.users.splice(i, 1);
+    }
+    tweet.likes.count--;
+    await tweet.save();
   }
 
   res.status(200).json({
@@ -99,7 +122,7 @@ exports.likeTweet = async (req, res, next) => {
     likes: tweet.likes,
   });
 };
-exports.unlikeTweet = async (req, res, next) => {
+exports.dislikeTweet = async (req, res, next) => {
   let { userId } = req.body;
   const tweetId = req.params.tweetId;
   console.log(tweetId);
@@ -112,14 +135,38 @@ exports.unlikeTweet = async (req, res, next) => {
 
   // WebSocketService.emitNewPost(tweet);
 
-  if (tweet.likes.users.includes(userId)) {
+  // ^ click like button again to unlike, same with dislike button
+  //  ^ like to dislike = -2
+  // dislike tweet
+  if (
+    !tweet.dislikes.users.includes(userId) &&
+    !tweet.likes.users.includes(userId)
+  ) {
+    tweet.dislikes.users.push(userId);
+    tweet.likes.count--;
+    await tweet.save();
+  } else if (
+    tweet.likes.users.includes(userId) &&
+    !tweet.dislikes.users.includes(userId)
+  ) {
+    // remove dislike
     for (let i = 0; i < tweet.likes.users.length; i++) {
       if (tweet.likes.users[i].equals(userId)) tweet.likes.users.splice(i, 1);
     }
-    tweet.likes.count--;
+    tweet.dislikes.users.push(userId);
+    tweet.likes.count -= 2;
     await tweet.save();
-  } else {
-    return next(new AppError('You have already unliked this post..', 401));
+  } else if (
+    !tweet.likes.users.includes(userId) &&
+    tweet.dislikes.users.includes(userId)
+  ) {
+    // if have disliked remove dislike
+    for (let i = 0; i < tweet.dislikes.users.length; i++) {
+      if (tweet.dislikes.users[i].equals(userId))
+        tweet.dislikes.users.splice(i, 1);
+    }
+    tweet.likes.count++;
+    await tweet.save();
   }
 
   res.status(200).json({
