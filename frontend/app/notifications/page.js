@@ -1,15 +1,16 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaHeart, FaRetweet } from 'react-icons/fa';
 
 const NotificationItem = ({ type, message }) => {
   return (
-    <div className="flex items-center border-b py-2">
-      <div className="mr-4">
+    <div className="flex items-center border-t border-gray-300 py-4 hover:bg-gray-200 transition-colors duration-200 ease-in-out">
+      <div className="mr-4 px-4">
         {type === 'like' ? (
-          <span className="text-blue-500 text-2xl">&#x2665;</span>
+          <FaHeart className="text-blue-500 text-2xl" />
         ) : (
-          <span className="text-green-500 text-2xl">&#x21A9;</span>
+          <FaRetweet className="text-green-500 text-2xl" />
         )}
       </div>
       <div>
@@ -19,14 +20,7 @@ const NotificationItem = ({ type, message }) => {
   );
 };
 
-// Placeholder for now until we can get it connected to the database
 export default function Notifications() {
-  // const notifications = [
-  //   { type: 'like', content: 'Your post was liked!' },
-  //   { type: 'reply', content: 'Someone replied to your post!' },
-  //   // Add more notifications as needed
-  // ];
-
   const [notifications, setNotifications] = useState([]);
   const getAllNotifications = async () => {
     try {
@@ -43,9 +37,9 @@ export default function Notifications() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-gray-100">
-      <div className="max-w-md mx-auto mt-7 p-4 bg-white rounded-lg shadow-md text-center">
-        <h1 className="text-2xl font-bold mb-4">Notifications</h1>
+    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-r from-green-400 to-blue-500">
+      <div className="w-1/2 mx-auto mt-7 bg-white rounded-lg shadow-md text-center border-t border-gray-300">
+        <h1 className="text-2xl font-bold p-4">Notifications</h1>
         <div>
           {notifications.map((notification, index) => (
             <NotificationItem key={index} {...notification} />
