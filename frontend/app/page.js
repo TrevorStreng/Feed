@@ -16,7 +16,6 @@ export default function Home() {
   };
 
   const fetchAllTweets = async () => {
-    console.log(url);
     try {
       const res = await axios.get(`api/tweets`);
       let tweetArr = res.data.tweets;
@@ -68,16 +67,6 @@ export default function Home() {
       // Add like to tweet and send like notification
       const res = await axios.patch(`api/tweets/${tweetId}/like`, likeBody);
 
-      // Send notification
-      // const notificationBody = {
-      //   type: 'like',
-      // };
-      // const notifiactionRes = await axios.post(
-      //   `api/users/notification`,
-      //   notificationBody
-      // );
-      // console.log(notifiactionRes);
-
       setChanged(true);
     } catch (err) {
       console.error(err);
@@ -99,7 +88,7 @@ export default function Home() {
 
   // WebSocket connection
   useEffect(() => {
-    // console.log(wsUrl);
+    // UNCOMMENT BELOW TO ADD WEBSOCKET CONNECTION
     // const socket = io(wsUrl, { withCredentials: true });
     // socket.on('new-post', (data) => {
     //   fetchAllTweets();
@@ -141,47 +130,22 @@ export default function Home() {
             </button>
           </div>
         </div>
-
-        {/* Tweets */}
-        {/* Sample Tweet */}
-        {/* <div className="bg-white p-4 mb-4 rounded-lg shadow-md">
-          <div className="flex space-x-4">
-            <Image
-              src="/tweet-avatar.jpg" // Add the path to the tweet author's avatar image
-              alt="Tweet Author Avatar"
-              className="rounded-full"
-              width={40}
-              height={40}
-            />
-            <div>
-              <h3 className="font-semibold">Random Person</h3>
-              <p>This is a sample tweet. Welcome to Feed</p>
-            </div>
-          </div>
-        </div> */}
-        {/* End of Sample Tweet */}
         {tweets.length > 0 &&
           tweets.map((el, index) => (
             <div key={index} className="bg-white p-4 mb-4 rounded-lg shadow-md">
-              <div className="flex space-x-4">
-                <Image
-                  src="/pictures/user-avatar.jpg" // Add the path to the tweet author's avatar image
-                  alt="Tweet Author Avatar"
-                  className="rounded-full w-14 h-14"
-                  width={40}
-                  height={40}
-                />
+              <div className="flex space-x-4 items-center">
+                <div className="w-14 h-14">
+                  <Image
+                    src="/pictures/user-avatar.jpg" // Add the path to the tweet author's avatar image
+                    alt="Tweet Author Avatar"
+                    className="rounded-full"
+                    width={60}
+                    height={60}
+                  />
+                </div>
                 <div>
                   <h3 className="font-semibold">{el.username}</h3>
                   <p>{el.message}</p>
-                  {/*<div className="flex">
-                    {el.tags.length > 0 &&
-                      el.tags.map((tag, index) => (
-                        <div key={index} id="hashtags">
-                          <p>{tag}</p>
-                        </div>
-                      ))}
-                      </div> */}
                   <div className="flex">
                     <button
                       onClick={() => likeTweet(el._id)}
@@ -201,8 +165,6 @@ export default function Home() {
               </div>
             </div>
           ))}
-
-        {/* More tweets go here */}
       </div>
     </main>
   );
